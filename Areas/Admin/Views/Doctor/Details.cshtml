@@ -1,0 +1,81 @@
+﻿@model Doctor
+
+@{
+    ViewData["Title"] = "Doctor Details";
+}
+
+<h1>Doctor Details</h1>
+<hr />
+<br />
+
+<div class="font-weight-bold">
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Id" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="Id" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="FirstName" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="FirstName" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="LastName" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="LastName" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Gender" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="Gender" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="PhoneNumber" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="PhoneNumber" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Email" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="Email" readonly class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="HospitalId" class="custom-label"></label>
+        </div>
+        <div class="col-6">
+            <input asp-for="Hospital.Name" readonly class="form-control" />
+        </div>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-6 offset-2">
+        <partial name="_DetailsAndBackToListButtons" model="Model.Id" />
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿@model QualificationDetailsViewModel
+
+@{
+    ViewData["Title"] = "Qualification Details";
+}
+
+<h1>Qualification Details</h1>
+<hr />
+<br />
+
+<ul>
+    @foreach (var DoctorWhoBelong in Model.Doctors)
+    {
+        <li>
+            @DoctorWhoBelong.Doctor.FirstName @DoctorWhoBelong.Doctor.LastName
+        </li>
+    }
+</ul>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<br />
+
+<p><a asp-controller="Qualification" asp-action="AddDoctorToQualification" asp-route-id="@Model.Qualification.Id">Add Doctor</a></p>

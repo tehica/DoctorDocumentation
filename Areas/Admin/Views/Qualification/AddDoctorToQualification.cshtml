@@ -1,0 +1,18 @@
+﻿@model AddDoctorToQualificationViewModel
+@{
+    ViewData["Title"] = "Add Doctor";
+}
+
+<form asp-controller="Qualification" asp-action="AddDoctorToQualification" method="post">
+
+    <div class="form-group">
+        <label asp-for="DoctorId"></label>
+        <select asp-for="DoctorId" asp-items="Model.Doctors"></select>
+        <span asp-validation-for="DoctorId"></span>
+    </div>
+
+    <input type="hidden" name="QualificationID" value="@Model.Qualification.Id" />
+
+    <input type="submit" value="Add Doctor" />
+
+</form>

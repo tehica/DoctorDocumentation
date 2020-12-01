@@ -1,0 +1,94 @@
+﻿@model DoctorAndHospitalViewModel
+@using DoctorDoc1.Extensions
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Add Doctor</h1>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.FirstName" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Doctor.FirstName" class="form-control" />
+                    <span asp-validation-for="Doctor.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.LastName" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Doctor.LastName" class="form-control" />
+                    <span asp-validation-for="Doctor.LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.Gender" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Doctor.Gender" class="form-control" />
+                    <span asp-validation-for="Doctor.Gender" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.PhoneNumber" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Doctor.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Doctor.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.Email" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Doctor.Email" class="form-control" />
+                    <span asp-validation-for="Doctor.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Doctor.HospitalId" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <select asp-for="Doctor.HospitalId"
+                            asp-items="Model.HospitalList.ToSelectListItem(Model.Doctor.HospitalId)" class="form-control">
+                        <option value="0">Choose hospital</option>
+                    </select>
+                    <span asp-validation-for="Doctor.HospitalId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-6 offset-2">
+                    <partial name="_CreateAndBackToListButtons" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
