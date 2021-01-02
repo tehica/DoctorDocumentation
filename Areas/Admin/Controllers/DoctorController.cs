@@ -84,6 +84,21 @@ namespace DoctorDoc1.Areas.Admin.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, DoctorAndHospitalViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _db.Doctor.Update(model.Doctor);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

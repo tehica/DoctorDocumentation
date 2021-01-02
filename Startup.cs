@@ -17,6 +17,15 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using DoctorDoc1.Services;
 using DoctorDoc1.interfaces;
 
+// ovo jednom
+// git init
+// git remote add origin https://github.com/tehica/DoctorDocumentation.git
+
+// git status
+// git add .
+// git commit -m "Initialize"
+// git push origin master
+
 // git remote add origin https://github.com/tehica/DoctorDocumentation.git
 namespace DoctorDoc1
 {

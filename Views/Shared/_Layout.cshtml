@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<AppUser> signInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,17 +22,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Guest" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
-                        </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Guest" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>*@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="City" asp-action="Index">City</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Hospital" asp-action="Index">Hospital</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Qualification" asp-action="Index">Qualification</a>
@@ -38,27 +41,29 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Specialization" asp-action="Index">Specialization</a>
                         </li>
 
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown text-light font-weight-bold">
+                                <a class="nav-link dropdown-toggle" href="#"
+                                   id="navbarDropDownMenuLink" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Administration
+                                </a>
 
-                        <li class="nav-item dropdown text-light font-weight-bold">
-                            <a class="nav-link dropdown-toggle" href="#"
-                               id="navbarDropDownMenuLink" role="button"
-                               data-toggle="dropdown" aria-haspopup="true"
-                               aria-expanded="false">
-                                Administration
-                            </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
 
-                            <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                    <a class="dropdown-item" asp-area="Admin"
+                                       asp-controller="Administration"
+                                       asp-action="Index"> Users </a>
 
-                                <a class="dropdown-item" asp-area="Admin"
-                                   asp-controller="Administration"
-                                   asp-action="Index"> Users </a>
+                                    <a class="dropdown-item" asp-area="Admin"
+                                       asp-controller="Administration"
+                                       asp-action="ListRoles"> Roles </a>
+                                </div>
 
-                                <a class="dropdown-item" asp-area="Admin"
-                                   asp-controller="Administration"
-                                   asp-action="ListRoles"> Roles </a>
-                            </div>
-
-                        </li>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -70,9 +75,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+
+    <footer class="border-top footer text-white font-weight-bold bg-info">
         <div class="container">
-            &copy; 2020 - DoctorDoc1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - DoctorDoc1
+            &#8226; <a asp-area="Admin" asp-controller="City" asp-action="Index">City</a>
+            &#8226; <a asp-area="Admin" asp-controller="Hospital" asp-action="Index">Hospital</a>
+            &#8226; <a asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
+            &#8226; <a asp-area="Admin" asp-controller="Qualification" asp-action="Index">Qualification</a>
+            &#8226; <a asp-area="Admin" asp-controller="Specialization" asp-action="Index">Specialization</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
