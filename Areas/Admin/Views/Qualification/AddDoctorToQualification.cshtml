@@ -4,7 +4,7 @@
 }
 
 <form asp-controller="Qualification" asp-action="AddDoctorToQualification" method="post">
-
+    <!-- validacija za dodavanje doktora određenoj kvalifikaciji -->
     <div class="form-group">
         <label asp-for="DoctorId"></label>
         <select asp-for="DoctorId" asp-items="Model.Doctors"></select>
