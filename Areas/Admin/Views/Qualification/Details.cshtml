@@ -9,16 +9,17 @@
 <br />
 
 <ul>
-    @foreach (var DoctorWhoBelong in Model.Doctors)
-    {
-        <li>
-            @DoctorWhoBelong.Doctor.FirstName @DoctorWhoBelong.Doctor.LastName
+        @foreach (var DoctorWhoBelong in Model.Doctors)
+        {
+        <li class="form-control row mb-1 border-primary">
+            <span class="col-2 font-weight-bold">@DoctorWhoBelong.Doctor.FirstName @DoctorWhoBelong.Doctor.LastName</span>
+            <span class="text-right"> Acquired at: @DoctorWhoBelong.AcquiredAt</span>
         </li>
-    }
+        }
 </ul>
 
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
     <a asp-action="Index">Back to List</a>
 </div>
 

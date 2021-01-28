@@ -16,6 +16,8 @@ using DoctorDoc1.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using DoctorDoc1.Services;
 using DoctorDoc1.interfaces;
+using DoctorDoc1.Extensions;
+using DoctorDoc1.Middleware;
 
 // ovo jednom
 // git init
@@ -48,10 +50,9 @@ namespace DoctorDoc1
             //services.AddDefaultIdentity<IdentityUser>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
             services.AddIdentity<AppUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             //services.ConfigureApplicationCookie(options =>
             //{
@@ -64,31 +65,56 @@ namespace DoctorDoc1
             //    options.SlidingExpiration = true;
             //});
 
-            services.AddSingleton<IEmailSender, EmailSender>();
-
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<IHospitalRepository, HospitalRepository>();
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddApplicationServices();
 
             services.AddControllersWithViews();
+
+            // pitati za ovaj dio da li ce isto vrijediti za 
+            // services.AddControllers() i services.AddControllersWithViews()
+
+            //services.Configure<ApiBehaviorOptions>(options =>
+            //{
+            //    options.InvalidModelStateResponseFactory = actionContext =>
+            //    {
+            //        // check if any errors is in ModelState and if errors count > 0
+            //        // then select them and add into array
+            //        var errors = actionContext.ModelState
+            //                                  .Where(e => e.Value.Errors.Count > 0)
+            //                                  .SelectMany(x => x.Value.Errors)
+            //                                  .Select(x => x.ErrorMessage).ToArray();
+
+            //        // populate Errors property in ApiValidationErrorResponse with 'errors' <- array
+            //        var errorResponse = new ApiValidationErrorResponse
+            //        {
+            //            Errors = errors
+            //        };
+
+            //        // errorResponse is ApiValidationErrorResponse and it is passed as request
+            //        return new BadRequestObjectResult(errorResponse);
+            //    };
+            //});
+
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

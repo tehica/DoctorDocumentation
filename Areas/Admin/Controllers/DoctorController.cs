@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DoctorDoc1.Data;
 using DoctorDoc1.interfaces;
 using DoctorDoc1.Models;
+using DoctorDoc1.Specifications;
 using DoctorDoc1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,37 +15,37 @@ namespace DoctorDoc1.Areas.Admin.Controllers
     [Area("Admin")]
     public class DoctorController : Controller
     {
-        private readonly IDoctorRepository _doctorRepository;
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        //private readonly ApplicationDbContext _db;
-        //public DoctorController(ApplicationDbContext db)
-        //{
-        //    _db = db;
-        //}
-
-        public DoctorController(IDoctorRepository doctorRepository, ApplicationDbContext db)
+        public DoctorController(IUnitOfWork unitOfWork)
         {
-            _doctorRepository = doctorRepository;
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Doctor>>> Index()
+        public async Task<ActionResult<IReadOnlyList<Doctor>>> Index()
         {
-            //var docFromDb = await _doctorRepository.ListAllAsync();
-            //return View(docFromDb);
-            var doctorListFromDb = await _db.Doctor.ToListAsync();
-            return View(doctorListFromDb);
+            //var doctorListFromDb = await _db.Doctor.ToListAsync();
+            var spec = new DoctorWithHospitalSpecification();
+            var doctors = await _unitOfWork.Repository<Doctor>().ListAsync(spec);
+            return View(doctors);
         }
 
 
         [HttpGet]
         public async Task<ActionResult<Doctor>> Details(int id)
         {
-            var DoctorWithHospitalAndCity = await _db.Doctor.Include(h => h.Hospital)
-                                                            .FirstOrDefaultAsync(d => d.Id == id);
-            return View(DoctorWithHospitalAndCity);
+            //var DoctorWithHospitalAndCity = await _db.Doctor.Include(h => h.Hospital)
+            //                                                .FirstOrDefaultAsync(d => d.Id == id);
+            var spec = new DoctorWithHospitalSpecification(id);
+            var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithSpec(spec);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            return View(doctor);
         }
 
         [HttpGet]
@@ -53,7 +54,7 @@ namespace DoctorDoc1.Areas.Admin.Controllers
             DoctorAndHospitalViewModel model = new DoctorAndHospitalViewModel()
             {
                 Doctor = new Doctor(),
-                HospitalList = await _db.Hospital.ToListAsync()
+                HospitalList = await _unitOfWork.Repository<Hospital>().ListAllAsync()
             };
             return View(model);
         }
@@ -62,22 +63,24 @@ namespace DoctorDoc1.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DoctorAndHospitalViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _db.Doctor.Add(model.Doctor);
-                await _db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // refresh input elements
+                return View(model);
             }
-            return View(model);
+            await _unitOfWork.Repository<Doctor>().CreateAsync(model.Doctor);
+            await _unitOfWork.Complete();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<ActionResult<Doctor>> Edit(int id)
         {
+            var spec = new DoctorWithHospitalSpecification(id);
             DoctorAndHospitalViewModel model = new DoctorAndHospitalViewModel
             {
-                Doctor = await _db.Doctor.FindAsync(id),
-                HospitalList = await _db.Hospital.ToListAsync()
+                Doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithSpec(spec),
+                HospitalList = await _unitOfWork.Repository<Hospital>().ListAllAsync()
             };
 
             return View(model);
@@ -92,9 +95,9 @@ namespace DoctorDoc1.Areas.Admin.Controllers
             {
                 return View(model);
             }
-
-            _db.Doctor.Update(model.Doctor);
-            await _db.SaveChangesAsync();
+            await _unitOfWork.Repository<Doctor>().UpdateAsync(model.Doctor);
+            //                SaveAsync
+            await _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
@@ -102,9 +105,11 @@ namespace DoctorDoc1.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var doctorFromDb = await _db.Doctor.FindAsync(id);
-            _db.Doctor.Remove(doctorFromDb);
-            await _db.SaveChangesAsync();
+            //var doctorFromDb = await _db.Doctor.FindAsync(id);
+            //_db.Doctor.Remove(doctorFromDb);
+            //await _db.SaveChangesAsync();
+            var doctor = await _unitOfWork.Repository<Doctor>().GetByIdAsync(id);
+            await _unitOfWork.Repository<Doctor>().DeleteAsync(doctor);
             return RedirectToAction(nameof(Index));
         }
     }

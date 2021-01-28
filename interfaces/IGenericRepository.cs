@@ -1,4 +1,5 @@
 ﻿using DoctorDoc1.Models;
+using DoctorDoc1.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,13 @@ namespace DoctorDoc1.interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> ListAllAsync();
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(int id); // :)
+
+        Task<IEnumerable<T>> ListAllAsync(); // *
+
+        // SPEC
+        Task<T> GetEntityWithSpec(ISpecification<T> spec);
+        Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
 
         Task UpdateAsync(T model);
 

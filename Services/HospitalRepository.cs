@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace DoctorDoc1.Services
 {
+    // ne koristim više
     public class HospitalRepository : GenericRepository<Hospital>, IHospitalRepository
     {
         private readonly ApplicationDbContext _db;
@@ -23,7 +24,8 @@ namespace DoctorDoc1.Services
 
         public async Task<Hospital> GetHospitalWithCity(int id)
         {
-            var hospitalWithCity = await _db.Hospital.Include(c => c.City).FirstOrDefaultAsync(h => h.Id == id);
+            var hospitalWithCity = await _db.Hospital.Include(c => c.City)
+                                                     .FirstOrDefaultAsync(h => h.Id == id);
             return hospitalWithCity;
         }
 

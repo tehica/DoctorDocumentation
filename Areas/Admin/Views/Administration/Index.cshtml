@@ -40,14 +40,14 @@
                                 Delete
                             </button>
                         </form>
-                        @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.Now)
+                        @*@if (user.LockoutEnd == null || user.LockoutEnd < DateTime.Now)
                         {
                             <a class="btn btn-outline-success text-green font-weight-bold" asp-action="Lock" asp-route-id="@user.Id">Unlocked</a>
                         }
                         else
                         {
                             <a class="btn btn-danger text-red font-weight-bold" asp-action="UnLock" asp-route-id="@user.Id">Locked</a>
-                        }
+                        }*@
                     </div>
                 </div>
             </div>

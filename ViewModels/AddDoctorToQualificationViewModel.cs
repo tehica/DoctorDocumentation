@@ -9,12 +9,6 @@ namespace DoctorDoc1.ViewModels
 {
     public class AddDoctorToQualificationViewModel
     {
-        public Qualification Qualification { get; set; }
-        public List<SelectListItem> Doctors { get; set; }
-
-        public int QualificationId { get; set; }
-        public int DoctorId { get; set; }
-
         public AddDoctorToQualificationViewModel() { }
 
         public AddDoctorToQualificationViewModel(Qualification qualification, IEnumerable<Doctor> doctors)
@@ -32,5 +26,12 @@ namespace DoctorDoc1.ViewModels
 
             Qualification = qualification;
         }
+
+        public Qualification Qualification { get; set; }
+        public List<SelectListItem> Doctors { get; set; }
+
+        public int QualificationId { get; set; }
+        public int DoctorId { get; set; }
+
     }
 }

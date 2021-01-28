@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DoctorDoc1.Data;
+using DoctorDoc1.interfaces;
 using DoctorDoc1.Models;
+using DoctorDoc1.Specifications;
 using DoctorDoc1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +17,11 @@ namespace DoctorDoc1.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        public QualificationController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public QualificationController(ApplicationDbContext db, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _db = db;
         }
 
@@ -24,7 +29,6 @@ namespace DoctorDoc1.Areas.Admin.Controllers
         public async Task<ActionResult<IEnumerable<Qualification>>> Index()
         {
             IEnumerable<Qualification> getQualificationsFromDb = await _db.Qualification.ToListAsync();
-
             return View(getQualificationsFromDb);
         }
 
@@ -40,9 +44,9 @@ namespace DoctorDoc1.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Qualification.Add(qualification);
-                await _db.SaveChangesAsync();
-
+                //_db.Qualification.Add(qualification);
+                //await _db.SaveChangesAsync();
+                await _unitOfWork.Repository<Qualification>().CreateAsync(qualification);
                 return RedirectToAction(nameof(Index));
 
             }
@@ -143,7 +147,8 @@ namespace DoctorDoc1.Areas.Admin.Controllers
                     await _db.SaveChangesAsync();
                 }
 
-                return Redirect(string.Format("/Qualification/Details/{0}", model.QualificationId));
+                //return Redirect(string.Format("/Qualification/Details/{0}", model.QualificationId));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(model);
